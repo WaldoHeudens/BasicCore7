@@ -1,0 +1,54 @@
+﻿@model IEnumerable<BasicCore7.Models.Language>
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+
+@{
+    ViewData["Title"] = localizer["Languages"];
+}
+
+<h1>@localizer["Language"]</h1>
+
+<p>
+    <a asp-action="Create">@localizer["Add a Language"]</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cultures)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsShown)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cultures)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsShown)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">@localizer["Edit"]</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

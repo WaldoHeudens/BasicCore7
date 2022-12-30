@@ -1,0 +1,115 @@
+﻿@model PageList<UserViewModel>
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+
+@{
+    ViewData["Title"] = localizer["Users"];
+    string VerticaalStreepje = " | ";
+    string komma = "";
+
+}
+
+<h1>@localizer["Users"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @localizer["User"]
+            </th>
+            <th>
+                @localizer["First Name"]
+            </th>
+            <th>
+                @localizer["Last Name"]
+            </th>
+            <th>
+                @localizer["Email"]
+            </th>
+            <th>
+                @localizer["Roles"]
+            </th>
+            <th></th>
+        </tr>
+        <form method="get" asp-action="Index" asp-controller="Users">
+            <tr>
+                <th>
+                    <input type="text" name="userName" class="form-control" value=@ViewData["userName"] onchange="$(this.form).submit();" />
+                </th>
+                <th>
+                    <input type="text" name="firstName" class="form-control" value=@ViewData["firstName"] onchange="$(this.form).submit();" />
+                </th>
+                <th>
+                    <input type="text" name="lastName" class="form-control" value=@ViewData["lastName"] onchange="$(this.form).submit();" />
+                </th>
+                <th>
+                    <input type="text" name="email" class="form-control" value=@ViewData["email"] onchange="$(this.form).submit();" />
+                </th>
+            </tr>
+        </form>
+
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @{komma = "";}
+                    @foreach (string role in item.Roles)
+                    {
+                        @komma @role
+                        {
+                            komma = ", ";
+                        }
+                    }
+                </td>
+                <td>
+                @if (item.Deleted)
+                {
+                        <a asp-action="Undelete" asp-route-userName="@item.UserName">@localizer["Admit"]</a>
+                }
+                else
+                {
+                        <a asp-action="Delete" asp-route-userName="@item.UserName">@localizer["Block"] </a> @VerticaalStreepje
+                        <a asp-action="Roles" asp-route-userName="@item.UserName">@localizer["Roles"]</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-userName=@ViewData["userName"]
+   asp-route-email=@ViewData["email"]
+   asp-route-name=@ViewData["name"]
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   class="btn btn-default @prevDisabled">
+    @localizer["Previous"]
+</a>
+<a asp-action="Index"
+   asp-route-userName=@ViewData["userName"]
+   asp-route-name=@ViewData["name"]
+   asp-route-email=@ViewData["email"]
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   class="btn btn-default @nextDisabled">
+    @localizer["Next"]
+</a>
+

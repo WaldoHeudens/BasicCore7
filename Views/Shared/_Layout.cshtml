@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BasicCore7</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BasicCore7.styles.css" asp-append-version="true" />
+</head>
+
+@{
+    // Haal de huidige ApplicationUser op, m.i.v. de groepen
+    // Gebruik hiervoor de Middleware toegevoegde Globals klasse
+    BasicCore7.Data.BasicCore7User _user = BasicCore7.Services.Globals.GetUser(User.Identity.Name);
+}
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["Home"]</a>
+                        </li>
+                        @if (User.IsInRole("SystemAdministrator") || User.IsInRole("UserAdministrator"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown">@Localizer["System"]</a>
+                                <ul class="dropdown-menu">
+                                    @if (User.IsInRole("SystemAdministrator"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="Globals" asp-action="Index">@Localizer["Parameters"]</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="Languages" asp-action="Index">@Localizer["Languages"]</a>
+                                        </li>
+                                    }
+                                    @if (User.IsInRole("UserAdministrator"))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-controller="Users" asp-action="Index">@Localizer["Users"]</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <partial name="_LanguagePartial" />
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - BasicCore7 - <a asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

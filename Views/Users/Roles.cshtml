@@ -1,0 +1,35 @@
+﻿@model RoleViewModel
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+
+@{
+    ViewData["Title"] = localizer["Change Roles"];
+}
+
+<h1>@localizer["Change Roles"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Roles">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserName" />
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label">@localizer["User Name"]: </label>
+                @Html.DisplayFor(model => model.UserName)
+            </div>
+             <div>
+                <label asp-for="Roles" class="control-label">@localizer["Roles"]</label>
+                <select multiple="multiple" asp-for="Roles" class="form-control" asp-items="ViewBag.RoleIds"></select>
+            </div>
+            <div class="form-group" style="margin-top:20px">
+                <input type="submit" value=@localizer["Save"] class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div style="margin-top:20px">
+    <a asp-action="Index">@localizer["Back to List"]</a>
+</div>
+
