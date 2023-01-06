@@ -29,5 +29,7 @@ public class BasicCore7User : IdentityUser
     public string LanguageId { get; set; } = "nl";
     public Language? Language { get; set; }
 
+    public DateTime AddedOn { get; set; } = DateTime.Now;
+
 }
 

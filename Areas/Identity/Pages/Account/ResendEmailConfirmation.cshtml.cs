@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Localization;
 
 namespace BasicCore7.Areas.Identity.Pages.Account
 {
@@ -22,11 +23,15 @@ namespace BasicCore7.Areas.Identity.Pages.Account
     {
         private readonly UserManager<BasicCore7User> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IStringLocalizer<ResendEmailConfirmationModel> _localizer;
 
-        public ResendEmailConfirmationModel(UserManager<BasicCore7User> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<BasicCore7User> userManager, 
+                                            IEmailSender emailSender,
+                                            IStringLocalizer<ResendEmailConfirmationModel> localizer)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -48,6 +53,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
+            [Display (Name ="Email")]
             public string Email { get; set; }
         }
 
@@ -65,7 +71,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                ModelState.AddModelError(string.Empty, _localizer["Verification email sent. Please check your email."]);
                 return Page();
             }
 
@@ -79,10 +85,10 @@ namespace BasicCore7.Areas.Identity.Pages.Account
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 Input.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                _localizer["Confirm your email"],
+                _localizer["Please confirm your account by"] + $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> " + _localizer["clicking here"] + "</a>.");
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+            ModelState.AddModelError(string.Empty, _localizer["Verification email sent. Please check your email."]);
             return Page();
         }
     }

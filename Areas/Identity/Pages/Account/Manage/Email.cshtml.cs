@@ -128,16 +128,20 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
                     protocol: Request.Scheme);
+
+                string emailText = _stringLocalizer["Please confirm your account by"] + $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> *1! </a>.";
+                emailText = emailText.Replace("*1!", _stringLocalizer["clicking here"]);
+
                 await _emailSender.SendEmailAsync(
                     Input.NewEmail,
-                    "Confirm your email",
-                    _stringLocalizer["Please confirm your account by"] + $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> _stringLocalizer[\"clicking here\"]</a>.");
+                    _stringLocalizer["Confirm your email"],
+                    emailText);
 
-                StatusMessage = "Confirmation link to change email sent. Please check your email.";
+                StatusMessage = _stringLocalizer["Confirmation link to change email sent. Please check your email."];
                 return RedirectToPage();
             }
 
-            StatusMessage = "Your email is unchanged.";
+            StatusMessage = _stringLocalizer["Your email is unchanged."];
             return RedirectToPage();
         }
 
@@ -164,13 +168,12 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
                 pageHandler: null,
                 values: new { area = "Identity", userId = userId, code = code },
                 protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                email,
-                _stringLocalizer["Confirm your email"],
-                _stringLocalizer["Please confirm your account by"] +
-                $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>_stringLocalizer[\"clicking here\"]</a>.");
-
-            StatusMessage = _stringLocalizer["Verification email sent. Please check your email."];
+            string emailtext = _stringLocalizer["Please confirm your account by"] + $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> *1! </a>.";
+            emailtext = emailtext.Replace("*1!", _stringLocalizer["clicking here"]);
+            string titleText = _stringLocalizer["Confirm your email"];
+            string statusMessage = _stringLocalizer["Verification email sent. Please check your email."];
+            await _emailSender.SendEmailAsync(email, titleText, emailtext);
+            StatusMessage = statusMessage;
             return RedirectToPage();
         }
     }

@@ -12,16 +12,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Localization;
 
 namespace BasicCore7.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<BasicCore7User> _userManager;
+        private readonly IStringLocalizer<ConfirmEmailModel> _localizer;
 
-        public ConfirmEmailModel(UserManager<BasicCore7User> userManager)
+        public ConfirmEmailModel(UserManager<BasicCore7User> userManager, IStringLocalizer<ConfirmEmailModel> localizer)
         {
             _userManager = userManager;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -45,7 +48,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            StatusMessage = result.Succeeded ? _localizer["Thank you for confirming your email."] : _localizer["Error confirming your email."];
             return Page();
         }
     }

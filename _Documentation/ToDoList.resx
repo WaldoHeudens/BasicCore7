@@ -117,16 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Account/ConfirmEmail" xml:space="preserve">
-    <value>Gebruikersnaam NIET e-mailadres</value>
-  </data>
-  <data name="Account/Manage/Index" xml:space="preserve">
-    <value>Stuur input-gegevens op in get</value>
-  </data>
-  <data name="Account/RegisterConfirmation" xml:space="preserve">
-    <value>Nog niet in het Engels</value>
-  </data>
-  <data name="_ManageNav" xml:space="preserve">
-    <value>Add Language (+ nog niet in het Engels)</value>
-  </data>
 </root>

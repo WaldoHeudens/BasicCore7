@@ -8,7 +8,7 @@ namespace BasicCore7.Controllers
     public class HomeController : CultController
     {
 
-        public HomeController(BasicCore7DbContext context,
+        public HomeController(BasicCore7Context context,
             IHttpContextAccessor httpContextAccessor,
             ILogger<CultController> logger)
             : base(context, httpContextAccessor, logger)

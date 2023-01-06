@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Localization;
+using BasicCore7.Localizing;
 
 namespace BasicCore7.Areas.Identity.Pages.Account
 {
@@ -21,11 +23,13 @@ namespace BasicCore7.Areas.Identity.Pages.Account
     {
         private readonly UserManager<BasicCore7User> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IStringLocalizer<ForgotPasswordModel> _localizer;
 
-        public ForgotPasswordModel(UserManager<BasicCore7User> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<BasicCore7User> userManager, IEmailSender emailSender, IStringLocalizer<ForgotPasswordModel> localizer)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -45,8 +49,9 @@ namespace BasicCore7.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required (ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Required")]
+            [EmailAddress(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "EmailAddress")]
+            [Display (Name = "Email")]
             public string Email { get; set; }
         }
 
@@ -73,8 +78,8 @@ namespace BasicCore7.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    _localizer["Reset Password"],
+                    _localizer["Please reset your password by"] + $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> {_localizer["clicking here"]} </a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

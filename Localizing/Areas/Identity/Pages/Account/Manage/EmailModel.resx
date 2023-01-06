@@ -123,10 +123,16 @@
   <data name="Confirm your email" xml:space="preserve">
     <value>Confirm your email</value>
   </data>
+  <data name="Confirmation link to change email sent. Please check your email." xml:space="preserve">
+    <value>Confirmation link to change email sent. Please check your email.</value>
+  </data>
   <data name="Please confirm your account by" xml:space="preserve">
     <value>Please confirm your account by</value>
   </data>
   <data name="Verification email sent. Please check your email." xml:space="preserve">
     <value>Verification email sent. Please check your email.</value>
+  </data>
+  <data name="Your email is unchanged." xml:space="preserve">
+    <value>Your email is unchanged.</value>
   </data>
 </root>

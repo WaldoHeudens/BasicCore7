@@ -10,9 +10,9 @@ namespace BasicCore7.Controllers
     [Authorize (Roles = "SystemAdministrator")]
     public class GlobalsController : Controller
     {
-        private readonly BasicCore7DbContext _context;
+        private readonly BasicCore7Context _context;
 
-        public GlobalsController(BasicCore7DbContext context)
+        public GlobalsController(BasicCore7Context context)
         {
             _context = context;
         }

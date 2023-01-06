@@ -9,6 +9,7 @@ using BasicCore7.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace BasicCore7.Areas.Identity.Pages.Account.Manage
@@ -18,15 +19,18 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<BasicCore7User> _userManager;
         private readonly SignInManager<BasicCore7User> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly IStringLocalizer<DeletePersonalDataModel> _localizer;
 
         public DeletePersonalDataModel(
             UserManager<BasicCore7User> userManager,
             SignInManager<BasicCore7User> signInManager,
-            ILogger<DeletePersonalDataModel> logger)
+            ILogger<DeletePersonalDataModel> logger,
+            IStringLocalizer<DeletePersonalDataModel> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -82,7 +86,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
             {
                 if (!await _userManager.CheckPasswordAsync(user, Input.Password))
                 {
-                    ModelState.AddModelError(string.Empty, "Incorrect password.");
+                    ModelState.AddModelError(string.Empty, _localizer["Incorrect password."]);
                     return Page();
                 }
             }
@@ -91,7 +95,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
             var userId = await _userManager.GetUserIdAsync(user);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleting user.");
+                throw new InvalidOperationException(_localizer["Unexpected error occurred deleting user."]);
             }
 
             await _signInManager.SignOutAsync();

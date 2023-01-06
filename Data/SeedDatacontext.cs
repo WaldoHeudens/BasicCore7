@@ -12,7 +12,7 @@ namespace BasicCore7.Data
         public static async Task<IActionResult> Initialize(System.IServiceProvider serviceProvider, 
                     UserManager<BasicCore7User> userManager)
         {
-            using (var context = new BasicCore7DbContext(serviceProvider.GetRequiredService<DbContextOptions<BasicCore7DbContext>>()))
+            using (var context = new BasicCore7Context(serviceProvider.GetRequiredService<DbContextOptions<BasicCore7Context>>()))
             {
                 //context.Database.EnsureCreated();   // Creates database, incl. tables, but doesn't add migration
                 context.Database.Migrate();
@@ -32,11 +32,11 @@ namespace BasicCore7.Data
                     // Initialize global parameters
                     context.Globals.AddRange(
                         new Global { Id = "EmailAccount", Value = "???", Description = "Smtp Server Account Name"},
-                        new Global { Id = "EmailEmail", Value = "support@BasicCore7", Description = "Smtp Server Sender Email Address" },
+                        new Global { Id = "EmailEmail", Value = "support@BasicCore7.org", Description = "Smtp Server Sender Email Address" },
                         new Global { Id = "EmailPassword", Value = "???", Description = "Smtp Server Password" },
                         new Global { Id = "EmailPort", Value = "1025", Description = "Smtp Server Port" },
                         new Global { Id = "EmailSecurity", Value = "false", Description = "Smtp Server Enable ssl or tsl" },
-                        new Global { Id = "EmailSender", Value = "Administrator", Description = "Smtp Server Sender name" },
+                        new Global { Id = "EmailSender", Value = "Administrator@BasicCore7.org", Description = "Smtp Server Sender name" },
                         new Global { Id = "EmailServer", Value = "relay-auth.mailprotect.be", Description = "Email smtp server" },
                         new Global { Id = "Version", Value = "0.01", Description = "Database version" }
                     );
@@ -62,7 +62,7 @@ namespace BasicCore7.Data
                 // Initialisatie van de users en de rollen
 
                 BasicCore7User dummy = null;
-                BasicCore7User contributor = null;
+                BasicCore7User user = null;
                 BasicCore7User administrator = null;
 
                 if (!context.Roles.Any())
@@ -75,7 +75,8 @@ namespace BasicCore7.Data
                         LockoutEnabled = true,
                         UserName = "dummy",
                         FirstName = "?",
-                        LastName = "?"
+                        LastName = "?",
+                        AddedOn = DateTime.Now
                     };
                     administrator = new BasicCore7User
                     {
@@ -84,28 +85,29 @@ namespace BasicCore7.Data
                         LockoutEnabled = false,
                         UserName = "Administrator",
                         FirstName = "Administrator",
-                        LastName = "BasicCore7"
+                        LastName = "BasicCore7",
+                        AddedOn = DateTime.Now
                     };
-                    contributor = new BasicCore7User
+                    user = new BasicCore7User
                     {
                         Email = "contributor@BasicCore7.org",
                         EmailConfirmed = true,
                         LockoutEnabled = false,
                         UserName = "Contributor",
                         FirstName = "Contributor",
-                        LastName = "BasicCore7"
+                        LastName = "BasicCore7",
+                        AddedOn = DateTime.Now
                     };
 
                     await userManager.CreateAsync(administrator, "Abc!12345");
                     await userManager.CreateAsync(dummy, "Abc!12345");
-                    await userManager.CreateAsync(contributor, "Abc!12345");
+                    await userManager.CreateAsync(user, "Abc!12345");
 
                     context.Roles.AddRange
                     (
                         new IdentityRole { Id = "SystemAdministrator", Name = "SystemAdministrator", NormalizedName = "SYSTEMADMINISTRATOR" },
                         new IdentityRole { Id = "UserAdministrator", Name = "UserAdministrator", NormalizedName = "USERADMINISTRATOR" },
-                        new IdentityRole { Id = "User", Name = "User", NormalizedName = "USER" },
-                        new IdentityRole { Id = "Contributor", Name = "Contributor", NormalizedName = "CONTRIBUTOR" }
+                        new IdentityRole { Id = "User", Name = "User", NormalizedName = "USER" }
                     );
                     context.SaveChanges();
 
@@ -113,11 +115,9 @@ namespace BasicCore7.Data
 
                     context.UserRoles.AddRange
                         (
-                            new IdentityUserRole<string> { RoleId = "User", UserId = administrator.Id },
                             new IdentityUserRole<string> { RoleId = "UserAdministrator", UserId = administrator.Id },
                             new IdentityUserRole<string> { RoleId = "SystemAdministrator", UserId = administrator.Id },
-                            new IdentityUserRole<string> { RoleId = "User", UserId = contributor.Id },
-                            new IdentityUserRole<string> { RoleId = "Contributor", UserId = contributor.Id }
+                            new IdentityUserRole<string> { RoleId = "User", UserId = user.Id }
                         );
                     context.SaveChanges();
                 }

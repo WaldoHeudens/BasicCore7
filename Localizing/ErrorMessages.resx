@@ -128,6 +128,18 @@
 Passwords must have at least one lowercase ('a'-'z').
 Passwords must have at least one uppercase ('A'-'Z').</value>
   </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+    <value>Passwords must have at least one lowercase ('a'-'z')  (Waldo</value>
+  </data>
+  <data name="PasswordRequiresNonAlphaNumeric" xml:space="preserve">
+    <value>Passwords must have at least one non alphanumeric character.</value>
+  </data>
+  <data name="PasswordRequiresNumeric" xml:space="preserve">
+    <value>Passwords moust have ate least one numeric ('0'-'9')</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+    <value>Passwords must have at least one uppercase ('A'-'Z')</value>
+  </data>
   <data name="Required" xml:space="preserve">
     <value>The {0} field is required.</value>
   </data>

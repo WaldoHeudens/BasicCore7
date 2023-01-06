@@ -6,9 +6,11 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BasicCore7.Data;
+using BasicCore7.Localizing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Localization;
 
 namespace BasicCore7.Areas.Identity.Pages.Account.Manage
 {
@@ -16,13 +18,16 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<BasicCore7User> _userManager;
         private readonly SignInManager<BasicCore7User> _signInManager;
+        private readonly IStringLocalizer<SetPasswordModel> _localizer;
 
         public SetPasswordModel(
             UserManager<BasicCore7User> userManager,
-            SignInManager<BasicCore7User> signInManager)
+            SignInManager<BasicCore7User> signInManager,
+            IStringLocalizer<SetPasswordModel> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -50,7 +55,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "StringLength", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "New password")]
             public string NewPassword { get; set; }
@@ -61,7 +66,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Compare("NewPassword", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Compare")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -107,7 +112,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your password has been set.";
+            StatusMessage = _localizer["Your password has been set."];
 
             return RedirectToPage();
         }

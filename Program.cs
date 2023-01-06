@@ -12,13 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("CultTestDB");
-builder.Services.AddDbContext<BasicCore7.Data.BasicCore7DbContext>(options =>
+builder.Services.AddDbContext<BasicCore7.Data.BasicCore7Context>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<BasicCore7User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<BasicCore7.Data.BasicCore7DbContext>();
+    .AddEntityFrameworkStores<BasicCore7.Data.BasicCore7Context>();
 builder.Services.AddControllersWithViews();
 
 

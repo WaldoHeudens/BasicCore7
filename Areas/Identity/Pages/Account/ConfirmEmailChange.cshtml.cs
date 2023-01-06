@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Localization;
 
 namespace BasicCore7.Areas.Identity.Pages.Account
 {
@@ -18,11 +19,15 @@ namespace BasicCore7.Areas.Identity.Pages.Account
     {
         private readonly UserManager<BasicCore7User> _userManager;
         private readonly SignInManager<BasicCore7User> _signInManager;
+        private readonly IStringLocalizer<ConfirmEmailChangeModel> _localizer;
 
-        public ConfirmEmailChangeModel(UserManager<BasicCore7User> userManager, SignInManager<BasicCore7User> signInManager)
+        public ConfirmEmailChangeModel( UserManager<BasicCore7User> userManager, 
+                                        SignInManager<BasicCore7User> signInManager,
+                                        IStringLocalizer<ConfirmEmailChangeModel> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -49,21 +54,21 @@ namespace BasicCore7.Areas.Identity.Pages.Account
             var result = await _userManager.ChangeEmailAsync(user, email, code);
             if (!result.Succeeded)
             {
-                StatusMessage = "Error changing email.";
+                StatusMessage = _localizer["Error changing email."];
                 return Page();
             }
 
-            // In our UI email and user name are one and the same, so when we update the email
-            // we need to update the user name.
-            var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
-            if (!setUserNameResult.Succeeded)
-            {
-                StatusMessage = "Error changing user name.";
-                return Page();
-            }
+            //// In our UI email and user name are one and the same, so when we update the email
+            //// we need to update the user name.
+            //var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
+            //if (!setUserNameResult.Succeeded)
+            //{
+            //    StatusMessage = _localizer["Error changing user name."];
+            //    return Page();
+            //}
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Thank you for confirming your email change.";
+            StatusMessage = _localizer["Thank you for confirming your email change."];
             return Page();
         }
     }

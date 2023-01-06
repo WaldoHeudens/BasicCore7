@@ -6,12 +6,12 @@ namespace BasicCore7.Controllers
 {
     public class CultController : Controller
     {
-        protected readonly BasicCore7DbContext _context;
+        protected readonly BasicCore7Context _context;
         protected readonly ILogger<CultController> _logger;
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly BasicCore7User _user;
 
-        public CultController(BasicCore7DbContext context, IHttpContextAccessor httpContextAccessor, ILogger<CultController> logger)
+        public CultController(BasicCore7Context context, IHttpContextAccessor httpContextAccessor, ILogger<CultController> logger)
         {
             _context = context;
             _logger = logger;

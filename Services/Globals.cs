@@ -41,7 +41,7 @@ namespace BasicCore7.Services
 
 
         // Middleware task
-        public async Task Invoke(HttpContext httpContext, BasicCore7DbContext dbContext)
+        public async Task Invoke(HttpContext httpContext, BasicCore7Context dbContext)
         {
             // Haal de gebruikersnaam op
             string name = httpContext.User.Identity.Name == null ? "dummy" : httpContext.User.Identity.Name;
@@ -62,7 +62,7 @@ namespace BasicCore7.Services
             await _next(httpContext);
         }
 
-        private static void AddUser(string name, BasicCore7DbContext dbContext, int count = 1)
+        private static void AddUser(string name, BasicCore7Context dbContext, int count = 1)
         {
             BasicCore7User user = dbContext.Users
             .FirstOrDefault(u => u.UserName == name);
@@ -98,7 +98,7 @@ namespace BasicCore7.Services
                 UserDictionary.Remove(us.Key);
         }
 
-        public static void ReloadUser(string userName, BasicCore7DbContext dbContext)
+        public static void ReloadUser(string userName, BasicCore7Context dbContext)
         {
             int count = UserDictionary[userName].Count;
             UserDictionary.Remove(userName);
@@ -106,7 +106,7 @@ namespace BasicCore7.Services
         }
 
 
-        public static void ApplyGlobals(BasicCore7DbContext context)
+        public static void ApplyGlobals(BasicCore7Context context)
         {
             List<Global> parameters = context.Globals.ToList();
             Globals.EmailServer = parameters.FirstOrDefault(p => p.Id == "EmailServer").Value;

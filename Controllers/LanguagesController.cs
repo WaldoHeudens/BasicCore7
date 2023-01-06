@@ -10,7 +10,7 @@ namespace BasicCore7.Controllers
     public class LanguagesController : CultController
     {
 
-        public LanguagesController(BasicCore7DbContext context, 
+        public LanguagesController(BasicCore7Context context, 
             IHttpContextAccessor httpContextAccessor,
             ILogger<CultController> logger)
             : base(context, httpContextAccessor, logger)

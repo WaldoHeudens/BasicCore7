@@ -120,6 +120,9 @@
   <data name="First name" xml:space="preserve">
     <value>Voornaam</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Taal</value>
+  </data>
   <data name="Last name" xml:space="preserve">
     <value>Achternaam</value>
   </data>

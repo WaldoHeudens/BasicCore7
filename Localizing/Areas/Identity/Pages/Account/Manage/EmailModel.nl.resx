@@ -123,10 +123,16 @@
   <data name="Confirm your email" xml:space="preserve">
     <value>Bevestig je e-mail</value>
   </data>
+  <data name="Confirmation link to change email sent. Please check your email." xml:space="preserve">
+    <value>Een bevestigingse-mail werd verzonden.  Controleer uw e-mails aub.</value>
+  </data>
   <data name="Please confirm your account by" xml:space="preserve">
     <value>Bevestig je e-mail aub door hier</value>
   </data>
   <data name="Verification email sent. Please check your email." xml:space="preserve">
     <value>Een verificatiee-mail werd verzonden.  Controleer uw e-mails aub.</value>
+  </data>
+  <data name="Your email is unchanged." xml:space="preserve">
+    <value>Uw e-mailadres werd niet gewijzigd.</value>
   </data>
 </root>

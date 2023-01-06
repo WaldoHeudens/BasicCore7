@@ -25,7 +25,7 @@ namespace BasicCore7.Models
         public bool IsShown { get; set; } = true;
 
 
-        public static void Initialize(BasicCore7DbContext context)
+        public static void Initialize(BasicCore7Context context)
         {
             Language.Languages = context.Language.OrderBy(e => e.Name).ToList();
             Language.LanguagesDictionary = new Dictionary<string, Language>();

@@ -27,7 +27,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<BasicCore7User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly BasicCore7DbContext _context;
+        private readonly BasicCore7Context _context;
         private readonly IStringLocalizer<RegisterModel> _localizer;
 
         public RegisterModel(
@@ -36,7 +36,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account
             SignInManager<BasicCore7User> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            BasicCore7DbContext context, 
+            BasicCore7Context context, 
             IStringLocalizer<RegisterModel> localizer)
         {
             _userManager = userManager;
@@ -135,11 +135,18 @@ namespace BasicCore7.Areas.Identity.Pages.Account
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
+                BasicCore7User tempUser = await _emailStore.FindByEmailAsync(Input.Email, CancellationToken.None);
+                if (tempUser != null) 
+                {
+                    ModelState.AddModelError(string.Empty, _localizer["A user with this e-mail address already exists."]);
+                    return Page();
+                }
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.LanguageId = Thread.CurrentThread.CurrentCulture.ToString().Substring(0, 2);
                 user.Language = _context.Language.FirstOrDefault(l => l.Id == user.LanguageId);
+                user.AddedOn = DateTime.Now;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -150,7 +157,6 @@ namespace BasicCore7.Areas.Identity.Pages.Account
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     _userManager.AddToRoleAsync(user, "User");          // By purpose not awaited
-                    _userManager.AddToRoleAsync(user, "Contributor");   // By purpose not awaited
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
@@ -160,15 +166,15 @@ namespace BasicCore7.Areas.Identity.Pages.Account
                     emailtext = emailtext.Replace("*1!", _localizer["clicking here"]);
                     await _emailSender.SendEmailAsync(Input.Email, _localizer["Confirm your email"], emailtext);
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    //if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    //{
+                    //    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                    //}
+                    //else
+                    //{
+                    //    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //    return LocalRedirect(returnUrl);
+                    //}
                 }
                 foreach (var error in result.Errors)
                 {

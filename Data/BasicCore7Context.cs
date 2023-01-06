@@ -5,9 +5,9 @@ using BasicCore7.Services;
 
 namespace BasicCore7.Data;
 
-public class BasicCore7DbContext : IdentityDbContext<BasicCore7User>
+public class BasicCore7Context : IdentityDbContext<BasicCore7User>
 {
-    public BasicCore7DbContext(DbContextOptions<BasicCore7DbContext> options)
+    public BasicCore7Context(DbContextOptions<BasicCore7Context> options)
         : base(options)
     {
     }

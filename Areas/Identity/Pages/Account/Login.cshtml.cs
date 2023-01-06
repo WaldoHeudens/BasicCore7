@@ -18,10 +18,10 @@ namespace BasicCore7.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<BasicCore7User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly BasicCore7DbContext _context;
+        private readonly BasicCore7Context _context;
         private readonly IStringLocalizer<LoginModel> _localizer;
 
-        public LoginModel(SignInManager<BasicCore7User> signInManager, ILogger<LoginModel> logger, BasicCore7DbContext context, IStringLocalizer<LoginModel> localizer)
+        public LoginModel(SignInManager<BasicCore7User> signInManager, ILogger<LoginModel> logger, BasicCore7Context context, IStringLocalizer<LoginModel> localizer)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -98,7 +98,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            // ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
         }

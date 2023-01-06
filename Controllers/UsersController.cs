@@ -12,7 +12,7 @@ namespace GroupSpace2022.Controllers
     public class UsersController : CultController
     {
 
-        public UsersController(BasicCore7DbContext context, IHttpContextAccessor httpContextAccessor, ILogger<CultController> logger)
+        public UsersController(BasicCore7Context context, IHttpContextAccessor httpContextAccessor, ILogger<CultController> logger)
             : base(context, httpContextAccessor, logger)
         {
         }

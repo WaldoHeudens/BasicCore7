@@ -123,6 +123,9 @@
   <data name="External logins" xml:space="preserve">
     <value>External logins</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>

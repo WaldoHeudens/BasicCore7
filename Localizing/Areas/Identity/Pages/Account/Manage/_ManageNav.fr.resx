@@ -123,6 +123,9 @@
   <data name="External logins" xml:space="preserve">
     <value>Externe aanmeldingen</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Môt de passe</value>
   </data>
