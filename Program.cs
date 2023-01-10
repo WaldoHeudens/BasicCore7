@@ -72,6 +72,13 @@ builder.Services.Configure<CookieTempDataProviderOptions>(options => {
     options.Cookie.IsEssential = true;
 });
 
+// Voorbereiding voor het gebruik van RestFull API
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BasicCore7", Version = "v1" });
+});
+
 
 var app = builder.Build();
 
@@ -120,6 +127,9 @@ app.MapRazorPages();
 
 // Add the "Globals" middleware
 app.UseMiddleware<Globals>();
+
+// Voeg toe voor het gebruik van API
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 
 app.Run();
