@@ -165,6 +165,7 @@ namespace BasicCore7.Areas.Identity.Pages.Account
                     string emailtext = _localizer["Please confirm your account by"] + $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> *1! </a>.";
                     emailtext = emailtext.Replace("*1!", _localizer["clicking here"]);
                     await _emailSender.SendEmailAsync(Input.Email, _localizer["Confirm your email"], emailtext);
+                    return LocalRedirect(returnUrl);
 
                     //if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     //{
